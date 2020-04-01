@@ -8,9 +8,9 @@ import 'generated/l10n.dart';
 import 'locator.dart';
 import 'router.dart';
 import 'services/auth_service.dart';
+import 'ui/views/home_screen.dart';
+import 'ui/views/login_screen.dart';
 import 'utils/styles.dart';
-import 'views/screens/home_screen.dart';
-import 'views/screens/login_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +29,7 @@ class App extends StatelessWidget {
     StatusBar.color(accentColor);
 
     return MaterialApp(
-      title: 'Rewart',
+      title: 'Flutter Base Architecture',
       localizationsDelegates: [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
