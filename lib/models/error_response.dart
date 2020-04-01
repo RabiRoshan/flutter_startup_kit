@@ -1,38 +1,43 @@
 import 'dart:convert';
 
-ErrorResponse errorResponseFromJson(String str) =>
-    ErrorResponse.fromJson(json.decode(str));
+import 'package:meta/meta.dart';
 
-String errorResponseToJson(ErrorResponse data) => json.encode(data.toJson());
+ErrorResponse errorResponseFromJson(String str) =>
+    ErrorResponse.fromMap(json.decode(str));
+
+String errorResponseToJson(ErrorResponse data) => json.encode(data.toMap());
 
 class ErrorResponse {
-  String timestamp;
-  int status;
-  String error;
-  String message;
-  String path;
+  final bool success;
+  final String message;
+  final int errorCode;
 
   ErrorResponse({
-    this.timestamp,
-    this.status,
-    this.error,
-    this.message,
-    this.path,
+    @required this.success,
+    @required this.message,
+    @required this.errorCode,
   });
 
-  factory ErrorResponse.fromJson(Map<String, dynamic> json) => ErrorResponse(
-        timestamp: json["timestamp"] == null ? null : json["timestamp"],
-        status: json["status"] == null ? null : json["status"],
-        error: json["error"] == null ? null : json["error"],
-        message: json["message"] == null ? null : json["message"],
-        path: json["path"] == null ? null : json["path"],
+  ErrorResponse copyWith({
+    bool success,
+    String message,
+    int errorCode,
+  }) =>
+      ErrorResponse(
+        success: success ?? this.success,
+        message: message ?? this.message,
+        errorCode: errorCode ?? this.errorCode,
       );
 
-  Map<String, dynamic> toJson() => {
-        "timestamp": timestamp == null ? null : timestamp,
-        "status": status == null ? null : status,
-        "error": error == null ? null : error,
-        "message": message == null ? null : message,
-        "path": path == null ? null : path,
+  factory ErrorResponse.fromMap(Map<String, dynamic> json) => ErrorResponse(
+        success: json["success"],
+        message: json["message"],
+        errorCode: json["error_code"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "success": success,
+        "message": message,
+        "error_code": errorCode,
       };
 }

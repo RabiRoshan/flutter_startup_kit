@@ -27,10 +27,19 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  String get hello {
+  String get login {
     return Intl.message(
-      'hello',
-      name: 'hello',
+      'Login',
+      name: 'login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get snackbarErrorHeader {
+    return Intl.message(
+      'Custom Error Header',
+      name: 'snackbarErrorHeader',
       desc: '',
       args: [],
     );

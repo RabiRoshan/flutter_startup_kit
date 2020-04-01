@@ -1,3 +1,4 @@
 {
-  "hello": "hello"
+  "login": "Login",
+  "snackbarErrorHeader": "Custom Error Header"
 }

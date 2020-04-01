@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 
+// Colors
+Map<int, Color> color = {
+  50: Color.fromRGBO(24, 70, 145, .1),
+  100: Color.fromRGBO(24, 70, 145, .2),
+  200: Color.fromRGBO(24, 70, 145, .3),
+  300: Color.fromRGBO(24, 70, 145, .4),
+  400: Color.fromRGBO(24, 70, 145, .5),
+  500: Color.fromRGBO(24, 70, 145, .6),
+  600: Color.fromRGBO(24, 70, 145, .7),
+  700: Color.fromRGBO(24, 70, 145, .8),
+  800: Color.fromRGBO(24, 70, 145, .9),
+  900: Color.fromRGBO(24, 70, 145, 1),
+};
+
+MaterialColor appCustomColor = MaterialColor(0XFF184691, color);
+
 const accentColor = const Color(0XFF00B27A); //##00B27A
 const textColor = const Color(0XFF64697C); //#64697C
 const lightGrey = const Color(0xFFD6D6D6); //#D6D6D6
 const darkGrey = const Color(0xFF707070); //##707070
 
+// Fonts
 const String helveticaNeue = "Helvetica_Neue";
 const String roboto = "Roboto";
 const String sfPro = "SfPro";
 
-MaterialColor myColor = MaterialColor(0XFF81FFAD, color);
-
-Map<int, Color> color = {
-  50: Color.fromRGBO(0, 178, 122, .1),
-  100: Color.fromRGBO(0, 178, 122, .2),
-  200: Color.fromRGBO(0, 178, 122, .3),
-  300: Color.fromRGBO(0, 178, 122, .4),
-  400: Color.fromRGBO(0, 178, 122, .5),
-  500: Color.fromRGBO(0, 178, 122, .6),
-  600: Color.fromRGBO(0, 178, 122, .7),
-  700: Color.fromRGBO(0, 178, 122, .8),
-  800: Color.fromRGBO(0, 178, 122, .9),
-  900: Color.fromRGBO(0, 178, 122, 1),
-};
-
-//add your styles here
+// Text Styles
 const TextStyle medium20sp = TextStyle(fontSize: 20);
 const TextStyle buttonStyle =
     TextStyle(fontSize: 21, color: Colors.white, fontWeight: FontWeight.w200);

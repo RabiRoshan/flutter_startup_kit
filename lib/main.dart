@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:statusbar/statusbar.dart';
 
+import 'constants/app_constants.dart';
 import 'generated/l10n.dart';
 import 'locator.dart';
 import 'router.dart';
@@ -35,6 +37,7 @@ class App extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate,
       ],
       navigatorKey: Get.key,
       supportedLocales: S.delegate.supportedLocales,
@@ -52,8 +55,12 @@ class App extends StatelessWidget {
           if (snapshot.hasData) {
             return snapshot.data == true ? HomeScreen() : LoginScreen();
           } else {
-            //TODO add Splashscreen here if needed
-            return Container(color: Colors.white);
+            //TODO: Splashscreen
+            return Scaffold(
+              body: Center(
+                child: Image.asset(LocalImages.flutterLogo),
+              ),
+            );
           }
         },
       ),
