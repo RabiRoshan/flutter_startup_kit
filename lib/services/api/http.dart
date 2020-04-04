@@ -1,42 +1,53 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../locator.dart';
-import '../models/error_response.dart';
-import '../utils/logger.dart';
-import 'auth_service.dart';
+import '../../locator.dart';
+import '../../models/error_response.dart';
+import '../../utils/logger.dart';
+import '../auth_service.dart';
+import 'api.dart';
 
-class Api {
-  final String _baseUrl = "/";
-  final logger = getLogger("Api");
+class HttpApi implements Api {
+  final String _baseUrl = "https://reqres.in/api/";
+  final logger = getLogger("Http Api");
 
-  Future<http.Response> login(
-      {@required String email, @required String password}) async {
-    return _makeRestCall(RestType.POST, "login",
-        payload: {"email": email, "password": password});
+  HttpApi() {
+    logger.i('Using Http Api');
   }
 
-  Future<http.Response> getUsers() async {
-    return _makeRestCall(RestType.GET, "users");
+  Future login({@required String email, @required String password}) async {
+    return makeRestCall(RestType.POST, "login",
+        payload: {"email": email, "password": password}, authenticated: false);
   }
 
-  ErrorResponse _parseError(http.Response response) {
+  Future getUsers() async {
+    return makeRestCall(RestType.GET, "users");
+  }
+
+  ErrorResponse parseError(response) {
     return errorResponseFromJson(response.body);
   }
 
-  Future<http.Response> _makeRestCall(
+  Future makeRestCall(
     RestType eventType,
     String endpoint, {
     Map payload, // POST or PUT body
     Map queryParameters, // GET query body
+    bool authenticated = true,
   }) async {
     String url = "$_baseUrl$endpoint";
-    final headers = {
-      "Content-Type": "application/json",
-      "auth": "Bearer ${getIt<AuthService>().authToken}"
-    };
+    final headers = authenticated
+        ? {
+            HttpHeaders.contentTypeHeader: "application/json",
+            HttpHeaders.authorizationHeader:
+                "Bearer ${getIt<AuthService>().authToken}"
+          }
+        : {
+            HttpHeaders.contentTypeHeader: "application/json",
+          };
 
     try {
       http.Response response;
@@ -69,14 +80,20 @@ class Api {
       }
       logger.i("${eventType.toString()} call: $url");
 
-      logger.i("response: ${response.body}");
+      logger.i("response: ${response.statusCode}");
       if (response.statusCode != 200) {
-        return Future.error(_parseError(response));
+        logger.e(response.body);
+        return Future.error(parseError(response));
       }
+      logger.i(response.body);
       return response;
+    } on SocketException {
+      logger.e("error: Socket Exception!");
+
+      throw ErrorResponse(error: "No internet!");
     } catch (error) {
       logger.e("error: ${error.message}");
-      return error;
+      throw ErrorResponse(error: error.message);
     }
   }
 }

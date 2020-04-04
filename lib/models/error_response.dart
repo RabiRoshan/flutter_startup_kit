@@ -1,6 +1,9 @@
-import 'dart:convert';
+// To parse this JSON data, do
+//
+//     final errorResponse = errorResponseFromJson(jsonString);
 
 import 'package:meta/meta.dart';
+import 'dart:convert';
 
 ErrorResponse errorResponseFromJson(String str) =>
     ErrorResponse.fromMap(json.decode(str));
@@ -8,36 +11,24 @@ ErrorResponse errorResponseFromJson(String str) =>
 String errorResponseToJson(ErrorResponse data) => json.encode(data.toMap());
 
 class ErrorResponse {
-  final bool success;
-  final String message;
-  final int errorCode;
+  final String error;
 
   ErrorResponse({
-    @required this.success,
-    @required this.message,
-    @required this.errorCode,
+    @required this.error,
   });
 
   ErrorResponse copyWith({
-    bool success,
-    String message,
-    int errorCode,
+    String error,
   }) =>
       ErrorResponse(
-        success: success ?? this.success,
-        message: message ?? this.message,
-        errorCode: errorCode ?? this.errorCode,
+        error: error ?? this.error,
       );
 
   factory ErrorResponse.fromMap(Map<String, dynamic> json) => ErrorResponse(
-        success: json["success"],
-        message: json["message"],
-        errorCode: json["error_code"],
+        error: json["error"],
       );
 
   Map<String, dynamic> toMap() => {
-        "success": success,
-        "message": message,
-        "error_code": errorCode,
+        "error": error,
       };
 }

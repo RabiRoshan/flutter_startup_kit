@@ -1,9 +1,9 @@
+import 'package:device_preview/device_preview.dart' as devicePreview;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:statusbar/statusbar.dart';
 
 import 'constants/app_constants.dart';
 import 'generated/l10n.dart';
@@ -16,22 +16,45 @@ import 'utils/styles.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   setupLocator();
 
+  // Lock device orientation here if needed
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
   ]).then(
-    (_) => runApp(App()),
+    (_) => runApp(
+      // TODO: Remove device preview on build
+      devicePreview.DevicePreview(
+        // enabled: !kReleaseMode,
+        enabled: false,
+        builder: (BuildContext context) {
+          return App();
+        },
+      ),
+    ),
   );
+
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: appAccentColor,
+  ));
 }
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    StatusBar.color(accentColor);
-
     return MaterialApp(
-      title: 'Flutter Base Architecture',
+      title: 'Flutter Startup Kit',
+      debugShowCheckedModeBanner: false,
+      // TODO: Remove on build
+      locale: devicePreview.DevicePreview.of(context)
+          .locale, // <--- remove the locale
+      // TODO: Remove on build
+      builder: devicePreview.DevicePreview.appBuilder, // <--- remove
       localizationsDelegates: [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -43,11 +66,7 @@ class App extends StatelessWidget {
       supportedLocales: S.delegate.supportedLocales,
       onGenerateRoute: Router.generateRoute,
       theme: ThemeData(
-        primaryColor: accentColor,
-        primaryTextTheme: Theme.of(context).textTheme.apply(
-              bodyColor: textColor,
-              displayColor: textColor,
-            ),
+        primarySwatch: appCustomColor,
       ),
       home: StreamBuilder(
         stream: getIt<AuthService>().isLoggedIn.stream,

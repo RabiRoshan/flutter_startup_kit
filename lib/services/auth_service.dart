@@ -5,20 +5,21 @@ import 'package:rxdart/rxdart.dart';
 import '../locator.dart';
 import '../models/login_response.dart';
 import '../utils/logger.dart';
-import 'api.dart';
+import 'api/api.dart';
 
 enum AuthProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 class AuthService with ChangeNotifier {
   BehaviorSubject<bool> isLoggedIn = BehaviorSubject();
   String authToken;
+
   static const String _token_identifier = '_token_identifier';
 
   // Create storage
   final storage = FlutterSecureStorage();
 
   // Logger Head value
-  final log = getLogger("AuthService");
+  final logger = getLogger("AuthService");
 
   AuthService() {
     _init();
@@ -42,11 +43,11 @@ class AuthService with ChangeNotifier {
     return getIt<Api>()
         .login(email: email, password: password)
         .then((response) async {
-      LoginResponse loginResponse = loginResponseFromJson(response.body);
-      authToken = loginResponse.data.token;
+      LoginResponse res = loginResponseFromJson(response.body);
+      authToken = res.token;
+      isLoggedIn.add(true);
 
-      await storage.write(
-          key: _token_identifier, value: loginResponse.data.token);
+      await storage.write(key: _token_identifier, value: res.token);
     });
   }
 }

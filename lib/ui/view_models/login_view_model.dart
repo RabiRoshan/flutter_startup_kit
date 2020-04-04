@@ -3,31 +3,44 @@ import 'package:get/get.dart';
 
 import '../../generated/l10n.dart';
 import '../../locator.dart';
-import '../../router.dart';
 import '../../services/auth_service.dart';
-import '../../services/shared_preferences_helper.dart';
+import '../../utils/styles.dart';
 import 'base_view_model.dart';
 
 class LoginViewModel extends BaseViewModel {
-  onLoginPressed(BuildContext context, String email, String password) {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  bool loginWithTouchId = true;
+
+  changeLoginMode() async {
+    loginWithTouchId = !loginWithTouchId;
+    notifyListeners();
+  }
+
+  onLoginPressed(BuildContext context) async {
     setLoading(true);
 
-    getIt<AuthService>()
-        .login(email: email, password: password)
-        .then((response) async {
-          final hasCommited =
-              await getIt<SharedPreferencesHelper>().hasUserDataCommited();
-          if (hasCommited) Get.offAllNamed(HomeRoute);
-          // else
-          // Get.offAllNamed(LoginUserDetailRoute);
-        })
-        .catchError(
-          (error) => Get.snackbar(
-            S.of(context).snackbarErrorHeader,
-            error.message,
-            backgroundColor: Colors.white,
-          ),
-        )
-        .whenComplete(() => setLoading(false));
+    try {
+      await getIt<AuthService>()
+          .login(email: emailController.text, password: emailController.text);
+    } catch (e) {
+      setLoading(false);
+
+      Get.snackbar(
+        S.of(context).loginError,
+        e.error,
+        titleText: Text(
+          S.of(context).loginError,
+          style: smallTextOneAppPrimaryColorBold,
+        ),
+        messageText: Text(
+          e.error,
+          style: tinyTextOneAppPrimaryColorBold,
+        ),
+        backgroundColor: Colors.transparent,
+        colorText: Colors.red,
+      );
+    }
   }
 }
