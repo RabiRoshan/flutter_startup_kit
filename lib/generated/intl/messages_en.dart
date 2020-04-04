@@ -21,7 +21,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "back" : MessageLookupByLibrary.simpleMessage("Back"),
+    "email" : MessageLookupByLibrary.simpleMessage("Email"),
+    "firstName" : MessageLookupByLibrary.simpleMessage("First Name"),
+    "lastName" : MessageLookupByLibrary.simpleMessage("Last Name"),
     "login" : MessageLookupByLibrary.simpleMessage("Login"),
-    "snackbarErrorHeader" : MessageLookupByLibrary.simpleMessage("Custom Error Header")
+    "loginError" : MessageLookupByLibrary.simpleMessage("Login Error"),
+    "loginWith" : MessageLookupByLibrary.simpleMessage("Login with"),
+    "loginWithPassword" : MessageLookupByLibrary.simpleMessage("Login with password"),
+    "loginWithTouchId" : MessageLookupByLibrary.simpleMessage("Login with Touch ID"),
+    "logout" : MessageLookupByLibrary.simpleMessage("Logout"),
+    "password" : MessageLookupByLibrary.simpleMessage("Password"),
+    "touchId" : MessageLookupByLibrary.simpleMessage("Touch ID"),
+    "update" : MessageLookupByLibrary.simpleMessage("Update"),
+    "updateDataError" : MessageLookupByLibrary.simpleMessage("Update Data Error"),
+    "updateDetails" : MessageLookupByLibrary.simpleMessage("Update Details"),
+    "welcome" : MessageLookupByLibrary.simpleMessage("Welcome")
   };
 }

@@ -36,10 +36,136 @@ class S {
     );
   }
 
-  String get snackbarErrorHeader {
+  String get logout {
     return Intl.message(
-      'Custom Error Header',
-      name: 'snackbarErrorHeader',
+      'Logout',
+      name: 'logout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get loginWith {
+    return Intl.message(
+      'Login with',
+      name: 'loginWith',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get touchId {
+    return Intl.message(
+      'Touch ID',
+      name: 'touchId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get loginWithPassword {
+    return Intl.message(
+      'Login with password',
+      name: 'loginWithPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get loginWithTouchId {
+    return Intl.message(
+      'Login with Touch ID',
+      name: 'loginWithTouchId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get loginError {
+    return Intl.message(
+      'Login Error',
+      name: 'loginError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get welcome {
+    return Intl.message(
+      'Welcome',
+      name: 'welcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get email {
+    return Intl.message(
+      'Email',
+      name: 'email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get password {
+    return Intl.message(
+      'Password',
+      name: 'password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get firstName {
+    return Intl.message(
+      'First Name',
+      name: 'firstName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get lastName {
+    return Intl.message(
+      'Last Name',
+      name: 'lastName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get updateDetails {
+    return Intl.message(
+      'Update Details',
+      name: 'updateDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get update {
+    return Intl.message(
+      'Update',
+      name: 'update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get updateDataError {
+    return Intl.message(
+      'Update Data Error',
+      name: 'updateDataError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get back {
+    return Intl.message(
+      'Back',
+      name: 'back',
       desc: '',
       args: [],
     );

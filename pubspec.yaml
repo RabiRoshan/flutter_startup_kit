@@ -1,5 +1,5 @@
-name: flutter_startup_kit
-description: A Startup Kit with base structure.
+name: reward_chain
+description: Reward System.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -20,14 +20,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
   #localization
   flutter_localizations:
     sdk: flutter
@@ -40,9 +32,6 @@ dev_dependencies:
 
   #navigation
   get: ^1.11.6
-
-  #change_status_bar_color_easily:
-  statusbar: ^1.1.0
 
   #http
   http: ^0.12.0+4
@@ -58,6 +47,17 @@ dev_dependencies:
 
   #provider_architecture
   provider_architecture: ^1.0.6
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  #https://pub.dev/packages/device_preview
+  device_preview: ^0.4.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
