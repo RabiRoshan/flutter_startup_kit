@@ -21,7 +21,8 @@ class ButtonOne extends StatelessWidget {
   Widget build(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS)
       return CupertinoButton(
-        onPressed: onPressed,
+        onPressed: !showLoader ? onPressed : null,
+        disabledColor: appPrimaryColor,
         color: appAccentColor,
         padding: const EdgeInsets.all(30),
         borderRadius: BorderRadius.all(
@@ -29,17 +30,7 @@ class ButtonOne extends StatelessWidget {
             14,
           ),
         ),
-        child: showLoader
-            ? (CircularProgressIndicator(
-                backgroundColor: textPrimaryColor,
-              ))
-            : (child ??
-                Center(
-                  child: Text(
-                    text,
-                    style: smallTextOneTextPrimaryColorReg,
-                  ),
-                )),
+        child: generateButtonChild(showLoader, child, text),
       );
     else
       return ClipRRect(
@@ -49,20 +40,11 @@ class ButtonOne extends StatelessWidget {
           ),
         ),
         child: FlatButton(
-          onPressed: onPressed,
+          onPressed: !showLoader ? onPressed : null,
+          disabledColor: appPrimaryColor,
           color: appAccentColor,
           padding: const EdgeInsets.all(30),
-          child: showLoader
-              ? (CircularProgressIndicator(
-                  backgroundColor: textPrimaryColor,
-                ))
-              : (child ??
-                  Center(
-                    child: Text(
-                      text,
-                      style: smallTextOneTextPrimaryColorReg,
-                    ),
-                  )),
+          child: generateButtonChild(showLoader, child, text),
         ),
       );
   }
@@ -86,7 +68,8 @@ class ButtonTwo extends StatelessWidget {
   Widget build(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS)
       return CupertinoButton(
-        onPressed: onPressed,
+        onPressed: !showLoader ? onPressed : null,
+        disabledColor: appPrimaryColor,
         color: appPrimaryColor,
         padding: const EdgeInsets.all(15),
         borderRadius: BorderRadius.all(
@@ -94,17 +77,7 @@ class ButtonTwo extends StatelessWidget {
             8,
           ),
         ),
-        child: showLoader
-            ? (CircularProgressIndicator(
-                backgroundColor: textPrimaryColor,
-              ))
-            : (child ??
-                Center(
-                  child: Text(
-                    text,
-                    style: smallTextOneTextPrimaryColorBold,
-                  ),
-                )),
+        child: generateButtonChild(showLoader, child, text),
       );
     else
       return ClipRRect(
@@ -114,21 +87,24 @@ class ButtonTwo extends StatelessWidget {
           ),
         ),
         child: FlatButton(
-          onPressed: onPressed,
+          onPressed: !showLoader ? onPressed : null,
+          disabledColor: appPrimaryColor,
           color: appPrimaryColor,
           padding: const EdgeInsets.all(15),
-          child: showLoader
-              ? (CircularProgressIndicator(
-                  backgroundColor: textPrimaryColor,
-                ))
-              : (child ??
-                  Center(
-                    child: Text(
-                      text,
-                      style: smallTextOneTextPrimaryColorBold,
-                    ),
-                  )),
+          child: generateButtonChild(showLoader, child, text),
         ),
       );
   }
 }
+
+Widget generateButtonChild(bool showLoader, child, text) => showLoader
+    ? (CircularProgressIndicator(
+        backgroundColor: textPrimaryColor,
+      ))
+    : (child ??
+        Center(
+          child: Text(
+            text,
+            style: smallTextOneTextPrimaryColorBold,
+          ),
+        ));
