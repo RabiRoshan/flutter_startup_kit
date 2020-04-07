@@ -2,6 +2,12 @@
 
 My boilerplate for a flutter app.
 
+This branch is using **bloc architecture** style inpired from [Reso Coder](https://resocoder.com/2019/10/26/flutter-bloc-library-tutorial-1-0-0-stable-reactive-state-management/).
+
+To view the **mvvm architecture** style, [click here.](https://github.com/RabiRoshan/flutter_startup_kit/tree/mvvm_architecture) (Inspired from [FilledStacks](https://www.filledstacks.com/post/flutter-architecture-my-provider-implementation-guide)).
+
+Both branches make use of [Responsive UI by FilledStacks](https://www.filledstacks.com/post/the-best-flutter-responsive-ui-pattern/).
+
 ## Installation and Instructions
 
 #### 1. Initial Steps:
@@ -61,3 +67,8 @@ Instructions to remove them are commented on corresponding lines of main.dart.
 The example project is composed of 3 screens (LoginScreen, HomeScreen and EnterDetailsScreen), all of which makes use of the base architecture.
 
 Modify and build on this project.
+
+## References/Inspirations
+
+1. [FilledStacks](https://www.filledstacks.com/)
+2. [Reso Coder](https://resocoder.com/)
