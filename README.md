@@ -6,7 +6,7 @@ There are two variations:
 
 1. To view the **bloc architecture** style, [click here.](https://github.com/RabiRoshan/flutter_startup_kit/tree/bloc_architecture) (Inspired from [Reso Coder](https://resocoder.com/2019/10/26/flutter-bloc-library-tutorial-1-0-0-stable-reactive-state-management/)).
 
-2. To view the **mvvm architecture** style, [click here.](https://github.com/RabiRoshan/flutter_startup_kit/tree/mvvm_architecture) (Inspired from [FilledStacks](https://www.filledstacks.com/post/flutter-architecture-my-provider-implementation-guide)).
+2. To view the **mvvm architecture** style, [click here.](https://github.com/RabiRoshan/flutter_startup_kit/tree/mvvm_architecture) (Inspired from [FilledStacks](https://www.filledstacks.com/post/flutter-architecture-my-provider-implementation-guide)). (You are currently on this branch.)
 
 Both branches make use of [Responsive UI by FilledStacks](https://www.filledstacks.com/post/the-best-flutter-responsive-ui-pattern/).
 
