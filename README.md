@@ -15,7 +15,8 @@ Both branches make use of [Responsive UI by FilledStacks](https://www.filledstac
 #### 1. Initial Steps:
 
 1. Clone the repo, unzip and change project folder name to your project name.
-   #### a. For Bloc Architecture
+
+#### a. For Bloc Architecture
 
 ```
  HTTPS: git clone -b bloc_architecture --single-branch https://github.com/RabiRoshan/flutter_startup_kit.git
