@@ -1,36 +1,100 @@
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
+import '../../bloc/auth_bloc/auth_bloc.dart';
 import '../../constants/app_constants.dart';
 import '../../generated/l10n.dart';
+import '../../router.dart';
 import '../../utils/styles.dart';
 import '../responsive/orientation_layout.dart';
 import '../responsive/screent_type_layout.dart';
-import '../view_models/login_view_model.dart';
 import '../widgets/Buttons.dart';
 import '../widgets/TextFields.dart';
 import 'base_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
 
   @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  bool _loginWithTouchId = true;
+
+  @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<LoginViewModel>.withConsumer(
-      viewModel: LoginViewModel(),
-      builder: (context, model, child) => ScreenTypeLayout(
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthFailedState) {
+          Get.snackbar(S.of(context).loginError, state.error.error);
+        } else if (state is AuthenticatedState) {
+          Get.offAllNamed(HomeRoute);
+        }
+      },
+      builder: (context, state) => ScreenTypeLayout(
         mobile: OrientationLayout(
-          portrait: LoginViewMobilePortrait(),
-          landscape: LoginViewMobileLandscape(),
+          portrait: LoginViewMobilePortrait(
+            emailController: emailController,
+            passwordController: passwordController,
+            loginWithTouchId: _loginWithTouchId,
+            onSwithcLoginMethod: _switchLoginMethod,
+            onLoginPressed: _login,
+            isLoggingIn: state is AuthenticatingState ?? false,
+          ),
+          landscape: LoginViewMobileLandscape(
+            emailController: emailController,
+            passwordController: passwordController,
+            loginWithTouchId: _loginWithTouchId,
+            onSwithcLoginMethod: _switchLoginMethod,
+            onLoginPressed: _login,
+            isLoggingIn: state is AuthenticatingState ?? false,
+          ),
         ),
+      ),
+    );
+  }
+
+  _switchLoginMethod() {
+    setState(() {
+      _loginWithTouchId = !_loginWithTouchId;
+    });
+  }
+
+  _login() {
+    BlocProvider.of<AuthBloc>(context).add(
+      LoginEvent(
+        emailController.text,
+        passwordController.text,
       ),
     );
   }
 }
 
-class LoginViewMobilePortrait extends ProviderWidget<LoginViewModel> {
+class LoginViewMobilePortrait extends StatelessWidget {
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final Function onSwithcLoginMethod;
+  final bool loginWithTouchId;
+  final Function onLoginPressed;
+  final isLoggingIn;
+
+  const LoginViewMobilePortrait(
+      {Key key,
+      this.emailController,
+      this.passwordController,
+      this.onSwithcLoginMethod,
+      this.loginWithTouchId,
+      this.onLoginPressed,
+      this.isLoggingIn = false})
+      : super(key: key);
+
   @override
-  Widget build(BuildContext context, model) {
+  Widget build(BuildContext context) {
     return BaseScreen(
       secureScreen: false,
       padding: const EdgeInsets.symmetric(
@@ -43,7 +107,7 @@ class LoginViewMobilePortrait extends ProviderWidget<LoginViewModel> {
             S.of(context).login,
             style: largeTextOneTextPrimaryColorReg,
           ),
-          model.loginWithTouchId
+          loginWithTouchId
               ? Column(
                   children: <Widget>[
                     Container(
@@ -79,7 +143,7 @@ class LoginViewMobilePortrait extends ProviderWidget<LoginViewModel> {
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: TextFieldOne(
                         hintText: S.of(context).email,
-                        controller: model.emailController,
+                        controller: emailController,
                       ),
                     ),
                     vSpace15,
@@ -87,7 +151,7 @@ class LoginViewMobilePortrait extends ProviderWidget<LoginViewModel> {
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: TextFieldOne(
                         hintText: S.of(context).password,
-                        controller: model.passwordController,
+                        controller: passwordController,
                         obscureText: true,
                       ),
                     ),
@@ -97,9 +161,9 @@ class LoginViewMobilePortrait extends ProviderWidget<LoginViewModel> {
                       children: <Widget>[
                         ButtonTwo(
                           text: S.of(context).login,
-                          showLoader: model.isLoading,
+                          showLoader: isLoggingIn,
                           onPressed: () {
-                            model.onLoginPressed(context);
+                            onLoginPressed();
                           },
                         ),
                       ],
@@ -109,11 +173,11 @@ class LoginViewMobilePortrait extends ProviderWidget<LoginViewModel> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: ButtonOne(
-              text: model.loginWithTouchId
+              text: loginWithTouchId
                   ? S.of(context).loginWithPassword
                   : S.of(context).loginWithTouchId,
               onPressed: () {
-                model.changeLoginMode();
+                onSwithcLoginMethod();
               },
             ),
           ),
@@ -123,9 +187,26 @@ class LoginViewMobilePortrait extends ProviderWidget<LoginViewModel> {
   }
 }
 
-class LoginViewMobileLandscape extends ProviderWidget<LoginViewModel> {
+class LoginViewMobileLandscape extends StatelessWidget {
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final Function onSwithcLoginMethod;
+  final bool loginWithTouchId;
+  final Function onLoginPressed;
+  final isLoggingIn;
+
+  const LoginViewMobileLandscape(
+      {Key key,
+      this.emailController,
+      this.passwordController,
+      this.onSwithcLoginMethod,
+      this.loginWithTouchId,
+      this.onLoginPressed,
+      this.isLoggingIn = false})
+      : super(key: key);
+
   @override
-  Widget build(BuildContext context, model) {
+  Widget build(BuildContext context) {
     return BaseScreen(
       secureScreen: false,
       padding: const EdgeInsets.symmetric(
@@ -134,7 +215,7 @@ class LoginViewMobileLandscape extends ProviderWidget<LoginViewModel> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          model.loginWithTouchId
+          loginWithTouchId
               ? Column(
                   children: <Widget>[
                     Container(
@@ -170,7 +251,7 @@ class LoginViewMobileLandscape extends ProviderWidget<LoginViewModel> {
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: TextFieldOne(
                         hintText: S.of(context).email,
-                        controller: model.emailController,
+                        controller: emailController,
                       ),
                     ),
                     vSpace15,
@@ -178,7 +259,7 @@ class LoginViewMobileLandscape extends ProviderWidget<LoginViewModel> {
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: TextFieldOne(
                         hintText: S.of(context).password,
-                        controller: model.passwordController,
+                        controller: passwordController,
                         obscureText: true,
                       ),
                     ),
@@ -188,9 +269,9 @@ class LoginViewMobileLandscape extends ProviderWidget<LoginViewModel> {
                       children: <Widget>[
                         ButtonTwo(
                           text: S.of(context).login,
-                          showLoader: model.isLoading,
+                          showLoader: isLoggingIn,
                           onPressed: () {
-                            model.onLoginPressed(context);
+                            onSwithcLoginMethod();
                           },
                         ),
                       ],
@@ -200,11 +281,11 @@ class LoginViewMobileLandscape extends ProviderWidget<LoginViewModel> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: ButtonOne(
-              text: model.loginWithTouchId
+              text: loginWithTouchId
                   ? S.of(context).loginWithPassword
                   : S.of(context).loginWithTouchId,
               onPressed: () {
-                model.changeLoginMode();
+                onSwithcLoginMethod();
               },
             ),
           ),

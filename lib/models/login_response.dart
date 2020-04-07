@@ -2,15 +2,17 @@
 //
 //     final loginResponse = loginResponseFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 LoginResponse loginResponseFromJson(String str) =>
     LoginResponse.fromMap(json.decode(str));
 
 String loginResponseToJson(LoginResponse data) => json.encode(data.toMap());
 
-class LoginResponse {
+class LoginResponse extends Equatable {
   final String token;
 
   LoginResponse({
@@ -31,4 +33,10 @@ class LoginResponse {
   Map<String, dynamic> toMap() => {
         "token": token,
       };
+
+  @override
+  List<Object> get props => [token];
+
+  @override
+  bool get stringify => true;
 }

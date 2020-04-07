@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import '../../locator.dart';
-import '../../services/auth_service.dart';
+import '../../bloc/auth_bloc/auth_bloc.dart';
+import '../../router.dart';
 import '../../utils/styles.dart';
 
-class BaseScreen extends StatefulWidget {
+// This is customized according to your app.
+// Here this screen serves to provide a common scaffold background and
+// to redirect to login screen if unauthenticated (if secureScreen is true).
+
+class BaseScreen extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
   final bool secureScreen;
@@ -14,39 +19,27 @@ class BaseScreen extends StatefulWidget {
       {Key key, this.child, this.padding, this.secureScreen = true})
       : super(key: key);
 
-  @override
-  _BaseScreenState createState() => _BaseScreenState();
-}
-
-class _BaseScreenState extends State<BaseScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.secureScreen)
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        getIt<AuthService>().isLoggedIn.listen((onData) {
-          redirectToLogin(onData);
-        });
-      });
-  }
-
-  redirectToLogin(bool isLoggedIn) {
-    if (!isLoggedIn) Get.until('/', (_) => true);
+  redirectToLogin() {
+    Get.offAllNamed(LoginRoute);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: widget.padding,
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (secureScreen && state is UnauthenticatedState) redirectToLogin();
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+            padding: padding,
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            width: double.infinity,
+            decoration: BoxDecoration(gradient: backgroundGradient),
+            child: child,
           ),
-          width: double.infinity,
-          decoration: BoxDecoration(gradient: backgroundGradient),
-          child: widget.child,
         ),
       ),
     );

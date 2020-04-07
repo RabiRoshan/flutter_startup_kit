@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/auth_bloc/auth_bloc.dart';
 import '../../generated/l10n.dart';
-import '../../locator.dart';
 import '../../router.dart';
-import '../../services/auth_service.dart';
 import '../../utils/styles.dart';
 import '../responsive/orientation_layout.dart';
 import '../responsive/screent_type_layout.dart';
@@ -23,14 +23,35 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return ScreenTypeLayout(
       mobile: OrientationLayout(
-        portrait: HomeViewMobilePortrait(),
-        landscape: HomeViewMobileLandscape(),
+        portrait: HomeViewMobilePortrait(
+          onLogoutPressed: _logout,
+          onUpdateDetailsPressed: _redirectToUpdateDetails,
+        ),
+        landscape: HomeViewMobileLandscape(
+          onLogoutPressed: _logout,
+          onUpdateDetailsPressed: _redirectToUpdateDetails,
+        ),
       ),
     );
+  }
+
+  _logout() {
+    BlocProvider.of<AuthBloc>(context).add(LogoutEvent());
+  }
+
+  _redirectToUpdateDetails() {
+    Get.toNamed(EnterUserDetailRoute);
   }
 }
 
 class HomeViewMobilePortrait extends StatelessWidget {
+  final Function onLogoutPressed;
+  final Function onUpdateDetailsPressed;
+
+  const HomeViewMobilePortrait(
+      {Key key, this.onLogoutPressed, this.onUpdateDetailsPressed})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
@@ -56,14 +77,14 @@ class HomeViewMobilePortrait extends StatelessWidget {
           ButtonTwo(
             text: S.of(context).updateDetails,
             onPressed: () {
-              Get.toNamed(EnterUserDetailRoute);
+              onUpdateDetailsPressed();
             },
           ),
           vSpace15,
           ButtonTwo(
             text: S.of(context).logout,
             onPressed: () {
-              getIt<AuthService>().logout();
+              onLogoutPressed();
             },
           ),
         ],
@@ -73,6 +94,13 @@ class HomeViewMobilePortrait extends StatelessWidget {
 }
 
 class HomeViewMobileLandscape extends StatelessWidget {
+  final Function onLogoutPressed;
+  final Function onUpdateDetailsPressed;
+
+  const HomeViewMobileLandscape(
+      {Key key, this.onLogoutPressed, this.onUpdateDetailsPressed})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
@@ -98,14 +126,14 @@ class HomeViewMobileLandscape extends StatelessWidget {
           ButtonTwo(
             text: S.of(context).updateDetails,
             onPressed: () {
-              Get.toNamed(EnterUserDetailRoute);
+              onUpdateDetailsPressed();
             },
           ),
           vSpace15,
           ButtonTwo(
             text: S.of(context).logout,
             onPressed: () {
-              getIt<AuthService>().logout();
+              onLogoutPressed();
             },
           ),
         ],

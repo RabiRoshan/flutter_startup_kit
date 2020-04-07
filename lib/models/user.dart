@@ -2,14 +2,16 @@
 //
 //     final user = userFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 User userFromJson(String str) => User.fromMap(json.decode(str));
 
 String userToJson(User data) => json.encode(data.toMap());
 
-class User {
+class User extends Equatable {
   final String firstName;
   final String lastName;
 
@@ -36,4 +38,10 @@ class User {
         "firstName": firstName,
         "lastName": lastName,
       };
+
+  @override
+  List<Object> get props => [firstName, lastName];
+
+  @override
+  bool get stringify => true;
 }

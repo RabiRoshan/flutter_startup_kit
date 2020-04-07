@@ -2,15 +2,17 @@
 //
 //     final errorResponse = errorResponseFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 ErrorResponse errorResponseFromJson(String str) =>
     ErrorResponse.fromMap(json.decode(str));
 
 String errorResponseToJson(ErrorResponse data) => json.encode(data.toMap());
 
-class ErrorResponse {
+class ErrorResponse extends Equatable {
   final String error;
 
   ErrorResponse({
@@ -31,4 +33,10 @@ class ErrorResponse {
   Map<String, dynamic> toMap() => {
         "error": error,
       };
+
+  @override
+  List<Object> get props => [error];
+
+  @override
+  bool get stringify => true;
 }

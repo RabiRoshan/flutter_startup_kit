@@ -1,5 +1,6 @@
 import 'package:logger/logger.dart';
 
+// To provide custom logger
 Logger getLogger(String className) {
   return Logger(printer: SimpleLogPrinter(className));
 }

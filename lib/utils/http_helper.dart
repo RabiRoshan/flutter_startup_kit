@@ -1,30 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../../locator.dart';
-import '../../models/error_response.dart';
-import '../../utils/logger.dart';
-import '../auth_service.dart';
-import 'api.dart';
+import '../locator.dart';
+import '../models/error_response.dart';
+import 'logger.dart';
+import 'secure_storage_helper.dart';
 
-class HttpApi implements Api {
+class HttpHelper {
+  // Logger Head value
+  final logger = getLogger("HttpHelper()");
+
+  // Base Url
   final String _baseUrl = "https://reqres.in/api/";
-  final logger = getLogger("Http Api");
 
-  HttpApi() {
-    logger.i('Using Http Api');
-  }
-
-  Future login({@required String email, @required String password}) async {
-    return makeRestCall(RestType.POST, "login",
-        payload: {"email": email, "password": password}, authenticated: false);
-  }
-
-  Future getUsers() async {
-    return makeRestCall(RestType.GET, "users");
+  HttpHelper() {
+    logger.i('Constructed');
   }
 
   ErrorResponse parseError(response) {
@@ -43,7 +35,7 @@ class HttpApi implements Api {
         ? {
             HttpHeaders.contentTypeHeader: "application/json",
             HttpHeaders.authorizationHeader:
-                "Bearer ${getIt<AuthService>().authToken}"
+                "Bearer ${await getIt<SecureStorageHelper>().getAuthToken()}"
           }
         : {
             HttpHeaders.contentTypeHeader: "application/json",
@@ -80,7 +72,7 @@ class HttpApi implements Api {
       }
       logger.i("${eventType.toString()} call: $url");
 
-      logger.i("response: ${response.statusCode}");
+      logger.i("Response Status Code: ${response.statusCode}");
       if (response.statusCode != 200) {
         logger.e(response.body);
         return Future.error(parseError(response));
@@ -88,11 +80,10 @@ class HttpApi implements Api {
       logger.i(response.body);
       return response;
     } on SocketException {
-      logger.e("error: Socket Exception!");
-
+      logger.e("Socket Exception!");
       throw ErrorResponse(error: "No internet!");
     } catch (error) {
-      logger.e("error: ${error.message}");
+      logger.e(" ${error.message}");
       throw ErrorResponse(error: error.message);
     }
   }

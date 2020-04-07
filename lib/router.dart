@@ -14,19 +14,13 @@ class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return GetRoute(
-          page: LoginScreen(),
-          settings: settings,
-        );
+        return GetRoute(page: LoginScreen(), settings: settings);
       case LoginRoute:
         return GetRoute(settings: settings, page: LoginScreen());
       case EnterUserDetailRoute:
         return GetRoute(settings: settings, page: EnterUserDetail());
       case HomeRoute:
-        return GetRoute(
-          settings: settings,
-          page: HomeScreen(),
-        );
+        return GetRoute(settings: settings, page: HomeScreen());
       default:
         return GetRoute(
           settings: settings,

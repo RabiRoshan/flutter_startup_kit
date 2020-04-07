@@ -1,82 +1,116 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:provider_architecture/provider_architecture.dart';
 
+import '../../bloc/enter_user_detail_screen_bloc/enter_user_detail_screen_bloc.dart';
 import '../../generated/l10n.dart';
+import '../../models/user.dart';
 import '../../utils/styles.dart';
-import '../view_models/enter_user_details_view_model.dart';
 import '../widgets/Buttons.dart';
 import '../widgets/TextFields.dart';
 import 'base_screen.dart';
 
-class EnterUserDetail extends StatelessWidget {
+class EnterUserDetail extends StatefulWidget {
   EnterUserDetail({Key key}) : super(key: key);
 
+  @override
+  _EnterUserDetailState createState() => _EnterUserDetailState();
+}
+
+class _EnterUserDetailState extends State<EnterUserDetail> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
 
+  // Bloc created manually
+  final _enterUserDetailScreenBloc = EnterUserDetailScreenBloc();
+
+  @override
+  void didChangeDependencies() {
+    _enterUserDetailScreenBloc.add(
+      LoadUserDetails(),
+    );
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    // Manually created blocs must be closed
+    _enterUserDetailScreenBloc.close();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<EnterUserDetailsViewModel>.withConsumer(
-      viewModel: EnterUserDetailsViewModel(),
-      builder: (context, model, child) => BaseScreen(
-        padding: const EdgeInsets.symmetric(
-          vertical: 30,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              S.of(context).updateDetails,
-              style: largeTextTwoTextPrimaryColorReg,
-              textAlign: TextAlign.center,
-            ),
-            vSpace20,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: TextFieldOne(
-                hintText: model.currentUser != null
-                    ? model.currentUser.firstName
-                    : S.of(context).firstName,
-                controller: _firstNameController,
+    return BaseScreen(
+      padding: const EdgeInsets.symmetric(
+        vertical: 30,
+      ),
+      child: BlocProvider.value(
+        value: _enterUserDetailScreenBloc,
+        child:
+            BlocBuilder<EnterUserDetailScreenBloc, EnterUserDetailScreenState>(
+          builder: (BuildContext context, state) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                S.of(context).updateDetails,
+                style: largeTextTwoTextPrimaryColorReg,
+                textAlign: TextAlign.center,
               ),
-            ),
-            vSpace15,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: TextFieldOne(
-                hintText: model.currentUser != null
-                    ? model.currentUser.lastName
-                    : S.of(context).lastName,
-                controller: _lastNameController,
+              vSpace20,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: TextFieldOne(
+                  hintText: (state is UserDetailsLoaded && state.user != null)
+                      ? state.user.firstName
+                      : S.of(context).firstName,
+                  controller: _firstNameController,
+                ),
               ),
-            ),
-            vSpace15,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ButtonTwo(
-                  text: S.of(context).update,
-                  showLoader: model.isLoading,
-                  onPressed: () {
-                    model.onSubmitDetails(
-                      context,
-                      _firstNameController.text,
-                      _lastNameController.text,
-                    );
-                  },
+              vSpace15,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: TextFieldOne(
+                  hintText: (state is UserDetailsLoaded && state.user != null)
+                      ? state.user.lastName
+                      : S.of(context).lastName,
+                  controller: _lastNameController,
                 ),
-                hSpace15,
-                ButtonTwo(
-                  text: S.of(context).back,
-                  showLoader: model.isLoading,
-                  onPressed: () {
-                    Get.back();
-                  },
-                ),
-              ],
-            ),
-          ],
+              ),
+              vSpace15,
+              state is UserDetailsLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ButtonTwo(
+                          text: S.of(context).update,
+                          onPressed: () {
+                            BlocProvider.of<EnterUserDetailScreenBloc>(context)
+                                .add(
+                              UpdateUserDetails(
+                                User(
+                                  firstName: _firstNameController.text,
+                                  lastName: _lastNameController.text,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        hSpace15,
+                        ButtonTwo(
+                          text: S.of(context).back,
+                          onPressed: () {
+                            Get.back();
+                          },
+                        ),
+                      ],
+                    ),
+            ],
+          ),
         ),
       ),
     );
