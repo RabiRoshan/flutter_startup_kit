@@ -5,10 +5,10 @@ import '../../utils/logger.dart';
 import 'api.dart';
 
 class FakeApi implements Api {
-  final logger = getLogger("Fake Api");
+  final logger = getLogger("FakeApi()");
 
   FakeApi() {
-    logger.i('Using Fake Api');
+    logger.i('Constructed');
   }
 
   Future login({@required String email, @required String password}) async {

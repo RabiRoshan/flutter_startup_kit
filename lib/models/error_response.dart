@@ -2,8 +2,9 @@
 //
 //     final errorResponse = errorResponseFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:meta/meta.dart';
 
 ErrorResponse errorResponseFromJson(String str) =>
     ErrorResponse.fromMap(json.decode(str));

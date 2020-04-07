@@ -1,32 +1,30 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../locator.dart';
 import '../models/login_response.dart';
 import '../utils/logger.dart';
+import '../utils/secure_storage_helper.dart';
 import 'api/api.dart';
 
 enum AuthProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 class AuthService with ChangeNotifier {
+  // Logger Head value
+  final logger = getLogger("AuthService()");
+
   BehaviorSubject<bool> isLoggedIn = BehaviorSubject();
   String authToken;
 
-  static const String _token_identifier = '_token_identifier';
-
-  // Create storage
-  final storage = FlutterSecureStorage();
-
-  // Logger Head value
-  final logger = getLogger("AuthService");
+  final storage = getIt<SecureStorageHelper>();
 
   AuthService() {
     _init();
   }
 
   _init() async {
-    this.authToken = await storage.read(key: _token_identifier);
+    this.authToken = await storage.getAuthToken();
+    logger.i("Constructed");
     if (authToken != null)
       isLoggedIn.add(true);
     else
@@ -47,7 +45,7 @@ class AuthService with ChangeNotifier {
       authToken = res.token;
       isLoggedIn.add(true);
 
-      await storage.write(key: _token_identifier, value: res.token);
+      await storage.setAuthToken(authToken);
     });
   }
 }

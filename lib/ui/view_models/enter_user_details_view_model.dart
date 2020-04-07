@@ -28,6 +28,9 @@ class EnterUserDetailsViewModel extends BaseViewModel {
       BuildContext context, String firstName, String lastName) async {
     setLoading(true);
 
+    //To show loading indicator for atleast 2 seconds
+    await Future.delayed(Duration(seconds: 2));
+
     try {
       await getIt<SharedPreferencesHelper>()
           .setLocalUserData(User(firstName: firstName, lastName: lastName));

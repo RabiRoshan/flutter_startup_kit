@@ -52,30 +52,32 @@ class EnterUserDetail extends StatelessWidget {
               ),
             ),
             vSpace15,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ButtonTwo(
-                  text: S.of(context).update,
-                  showLoader: model.isLoading,
-                  onPressed: () {
-                    model.onSubmitDetails(
-                      context,
-                      _firstNameController.text,
-                      _lastNameController.text,
-                    );
-                  },
-                ),
-                hSpace15,
-                ButtonTwo(
-                  text: S.of(context).back,
-                  showLoader: model.isLoading,
-                  onPressed: () {
-                    Get.back();
-                  },
-                ),
-              ],
-            ),
+            model.isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ButtonTwo(
+                        text: S.of(context).update,
+                        onPressed: () {
+                          model.onSubmitDetails(
+                            context,
+                            _firstNameController.text,
+                            _lastNameController.text,
+                          );
+                        },
+                      ),
+                      hSpace15,
+                      ButtonTwo(
+                        text: S.of(context).back,
+                        onPressed: () {
+                          Get.back();
+                        },
+                      ),
+                    ],
+                  ),
           ],
         ),
       ),

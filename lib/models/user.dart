@@ -2,8 +2,9 @@
 //
 //     final user = userFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:meta/meta.dart';
 
 User userFromJson(String str) => User.fromMap(json.decode(str));
 

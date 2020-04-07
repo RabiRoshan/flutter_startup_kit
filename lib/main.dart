@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
-import 'constants/app_constants.dart';
 import 'generated/l10n.dart';
 import 'locator.dart';
 import 'router.dart';
@@ -17,7 +16,8 @@ import 'utils/styles.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  setupLocator();
+// Change to true to use fake api
+  setupLocator(useFakeApi: false);
 
   // Lock device orientation here if needed
   SystemChrome.setPreferredOrientations([
@@ -38,7 +38,10 @@ void main() {
     ),
   );
 
+  // To make only bottom bar enabled and status bar hidded
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+
+  // To set the color of status bar
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: appAccentColor,
   ));
@@ -48,13 +51,19 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Startup Kit',
-      debugShowCheckedModeBanner: false,
       // TODO: Remove on build
       locale: devicePreview.DevicePreview.of(context)
           .locale, // <--- remove the locale
       // TODO: Remove on build
       builder: devicePreview.DevicePreview.appBuilder, // <--- remove
+
+      debugShowCheckedModeBanner: false,
+
+      title: 'Flutter Startup Kit',
+
+      // Localization Config:
+      // More details on
+      // https://flutter.dev/docs/development/accessibility-and-localization/internationalization
       localizationsDelegates: [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -62,24 +71,26 @@ class App extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
         DefaultCupertinoLocalizations.delegate,
       ],
-      navigatorKey: Get.key,
       supportedLocales: S.delegate.supportedLocales,
+
+      // Navigator key to use Get.
+      // More info on: https://pub.dev/packages/get
+      navigatorKey: Get.key,
+
       onGenerateRoute: Router.generateRoute,
       theme: ThemeData(
         primarySwatch: appCustomColor,
       ),
+
+      // check if logged in and show appropriate home
       home: StreamBuilder(
         stream: getIt<AuthService>().isLoggedIn.stream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return snapshot.data == true ? HomeScreen() : LoginScreen();
           } else {
-            //TODO: Splashscreen
-            return Scaffold(
-              body: Center(
-                child: Image.asset(LocalImages.flutterLogo),
-              ),
-            );
+            // Show loading indicator until AuthService is initialized
+            return Center(child: CircularProgressIndicator());
           }
         },
       ),

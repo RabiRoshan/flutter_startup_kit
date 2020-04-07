@@ -5,6 +5,10 @@ import '../../locator.dart';
 import '../../services/auth_service.dart';
 import '../../utils/styles.dart';
 
+// This is customized according to your app.
+// Here this screen serves to provide a common scaffold background and
+// to redirect to login screen if unauthenticated (if secureScreen is true).
+
 class BaseScreen extends StatefulWidget {
   final Widget child;
   final EdgeInsets padding;
@@ -25,14 +29,16 @@ class _BaseScreenState extends State<BaseScreen> {
 
     if (widget.secureScreen)
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        getIt<AuthService>().isLoggedIn.listen((onData) {
-          redirectToLogin(onData);
+        getIt<AuthService>().isLoggedIn.listen((loggedIn) {
+          if (!loggedIn) redirectToLogin();
         });
       });
   }
 
-  redirectToLogin(bool isLoggedIn) {
-    if (!isLoggedIn) Get.until('/', (_) => true);
+  redirectToLogin() {
+    // TODO: Change the following behaviour
+    // Do not use Get.offNamed(LoginRoute) here because the root page at '/' is responsible for changing view from LoginRoute to HomeRoute
+    Get.until('/', (_) => true);
   }
 
   @override

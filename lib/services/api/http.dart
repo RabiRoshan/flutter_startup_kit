@@ -11,11 +11,12 @@ import '../auth_service.dart';
 import 'api.dart';
 
 class HttpApi implements Api {
+  final logger = getLogger("HttpApi()");
+
   final String _baseUrl = "https://reqres.in/api/";
-  final logger = getLogger("Http Api");
 
   HttpApi() {
-    logger.i('Using Http Api');
+    logger.i('Constructed');
   }
 
   Future login({@required String email, @required String password}) async {
