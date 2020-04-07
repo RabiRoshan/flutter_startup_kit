@@ -2,9 +2,11 @@
 
 My boilerplate for a flutter app.
 
-This branch is using **mvvm architecture** style inpired from [FilledStacks](https://www.filledstacks.com/post/flutter-architecture-my-provider-implementation-guide).
+There are two variations:
 
-To view the **bloc architecture** style, [click here.](https://github.com/RabiRoshan/flutter_startup_kit/tree/bloc_architecture) (Inspired from [Reso Coder](https://resocoder.com/2019/10/26/flutter-bloc-library-tutorial-1-0-0-stable-reactive-state-management/)).
+1. To view the **bloc architecture** style, [click here.](https://github.com/RabiRoshan/flutter_startup_kit/tree/bloc_architecture) (Inspired from [Reso Coder](https://resocoder.com/2019/10/26/flutter-bloc-library-tutorial-1-0-0-stable-reactive-state-management/)).
+
+2. To view the **mvvm architecture** style, [click here.](https://github.com/RabiRoshan/flutter_startup_kit/tree/mvvm_architecture) (Inspired from [FilledStacks](https://www.filledstacks.com/post/flutter-architecture-my-provider-implementation-guide)).
 
 Both branches make use of [Responsive UI by FilledStacks](https://www.filledstacks.com/post/the-best-flutter-responsive-ui-pattern/).
 
@@ -12,7 +14,15 @@ Both branches make use of [Responsive UI by FilledStacks](https://www.filledstac
 
 #### 1. Initial Steps:
 
-1. Clone this repo, unzip and change project folder name to your project name.
+1. Clone the repo, unzip and change project folder name to your project name.
+   #### a. For Bloc Architecture
+   ```
+   git clone -b bloc_architecture --single-branch git@github.com:RabiRoshan/flutter_startup_kit.git
+   ```
+   #### b. For MVVM Architecture
+   ```
+   git clone -b mvvm_architecture --single-branch git@github.com:RabiRoshan/flutter_startup_kit.git
+   ```
 2. Delete the following:
 
 - `/android`
